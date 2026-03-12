@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ayman NAÏMI — Data Analyst</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0d0f;
+      --bg2: #131316;
+      --bg3: #1a1a1e;
+      --border: rgba(255,255,255,0.07);
+      --text: #e8e6e1;
+      --text-muted: #6b6b78;
+      --text-dim: #9b9aa6;
+      --accent: #a78bfa;
+      --accent-dim: rgba(167,139,250,0.12);
+      --accent-border: rgba(167,139,250,0.3);
+      --green: #6ee7b7;
+      --orange: #fb923c;
+      --blue: #60a5fa;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-weight: 300;
+      line-height: 1.7; overflow-x: hidden;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 999; opacity: 0.4;
+    }
+
+    /* HERO PHOTO */
+    .hero-photo-wrap {
+      position: absolute;
+      top: clamp(5rem, 12vw, 8rem);
+      right: clamp(1.5rem, 8vw, 8rem);
+      width: clamp(120px, 18vw, 220px);
+      height: clamp(120px, 18vw, 220px);
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--accent-border);
+      box-shadow: 0 0 40px rgba(167,139,250,0.15);
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+    .hero-photo {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 clamp(1.5rem, 5vw, 4rem); height: 64px;
+      background: rgba(13,13,15,0.88); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-family: 'DM Serif Display', serif; font-size: 1.1rem; color: var(--text); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-family: 'DM Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.65rem 1.4rem;
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      text-decoration: none; border-radius: 4px;
+      transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-primary { background: var(--accent); color: #0d0d0f; font-weight: 500; }
+    .btn-primary:hover { background: #c4b5fd; transform: translateY(-1px); }
+    .btn-ghost { background: transparent; color: var(--text-dim); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--accent-border); color: var(--accent); transform: translateY(-1px); }
+
+    /* HERO */
+    #hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 clamp(1.5rem, 8vw, 8rem); padding-bottom: 6rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-grid-bg {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 70%);
+    }
+    .hero-glow {
+      position: absolute; top: -200px; right: -100px; width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(167,139,250,0.1) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      font-family: 'DM Mono', monospace; font-size: 0.7rem;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;
+      opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+    .hero-tag::before { content: ''; display: block; width: 32px; height: 1px; background: var(--accent); }
+    .hero-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(3.5rem, 10vw, 8rem); line-height: 1.0; letter-spacing: -0.02em;
+      opacity: 0; animation: fadeUp 0.8s ease 0.35s forwards;
+    }
+    .hero-name em { font-style: italic; color: var(--accent); }
+    .hero-sub {
+      margin-top: 1.5rem; font-size: 1rem; color: var(--text-dim);
+      max-width: 520px; font-weight: 300;
+      opacity: 0; animation: fadeUp 0.8s ease 0.5s forwards;
+    }
+    .hero-ctas {
+      margin-top: 2.5rem; display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.8s ease 0.65s forwards;
+    }
+    .availability-badge {
+      margin-top: 3rem; display: inline-flex; align-items: center; gap: 0.6rem;
+      font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--green);
+      opacity: 0; animation: fadeUp 0.8s ease 0.8s forwards;
+    }
+    .availability-badge::before {
+      content: ''; width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* SECTIONS */
+    section { padding: 6rem clamp(1.5rem, 8vw, 8rem); border-top: 1px solid var(--border); }
+    .section-label {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 3rem; display: flex; align-items: center; gap: 1rem;
+    }
+    .section-label::after { content: ''; flex: 1; max-width: 80px; height: 1px; background: var(--accent-border); }
+    .section-title {
+      font-family: 'DM Serif Display', serif; font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 400; letter-spacing: -0.01em; margin-bottom: 1rem; line-height: 1.2;
+    }
+    .section-title em { font-style: italic; color: var(--accent); }
+
+    /* ABOUT */
+    #about .about-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 5rem; align-items: start; }
+    .about-body { display: flex; flex-direction: column; gap: 2.5rem; }
+    .about-text p { color: var(--text-dim); font-size: 0.95rem; margin-bottom: 0.75rem; }
+    .about-text p strong { color: var(--text); font-weight: 500; }
+
+    .subsection-title {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem;
+    }
+    .subsection-title::after { content: ''; flex: 1; height: 1px; background: var(--accent-border); opacity: 0.5; }
+
+    .interests-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .interest-item {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.9rem 1rem; transition: border-color 0.2s;
+    }
+    .interest-item:hover { border-color: var(--accent-border); }
+    .interest-name { font-size: 0.85rem; font-weight: 500; color: var(--text); margin-bottom: 0.3rem; }
+    .interest-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+    .objectives-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .objective-item { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.9rem; color: var(--text-dim); }
+    .objective-item::before { content: '→'; color: var(--accent); font-family: 'DM Mono', monospace; font-size: 0.75rem; margin-top: 0.15rem; flex-shrink: 0; }
+
+    .info-cards { display: flex; flex-direction: column; gap: 1px; }
+    .info-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      padding: 0.9rem 1.2rem; display: flex; flex-direction: column; gap: 0.2rem; transition: border-color 0.2s;
+    }
+    .info-card:first-child { border-radius: 8px 8px 0 0; }
+    .info-card:last-child { border-radius: 0 0 8px 8px; }
+    .info-card:hover { border-color: var(--accent-border); }
+    .info-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+    .info-value { font-size: 0.88rem; color: var(--text); }
+    .info-value a { color: var(--accent); text-decoration: none; }
+    .info-value a:hover { text-decoration: underline; }
+
+    /* SKILLS */
+    #skills .skills-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+    .skill-group {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.5rem; transition: border-color 0.2s, transform 0.2s;
+    }
+    .skill-group:hover { border-color: var(--accent-border); transform: translateY(-2px); }
+    .skill-group-title { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .tag { font-family: 'DM Mono', monospace; font-size: 0.68rem; padding: 0.22rem 0.55rem; background: var(--bg3); border: 1px solid var(--border); border-radius: 3px; color: var(--text-dim); }
+    .tag.highlight { border-color: var(--accent-border); color: var(--accent); }
+
+    /* PROJECTS */
+    #projects .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; }
+    .project-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .project-card:hover { border-color: var(--accent-border); transform: translateY(-3px); }
+    .project-img {
+      width: 100%; height: 160px; background: var(--bg3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; border-bottom: 1px solid var(--border); flex-shrink: 0;
+    }
+    .project-body { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; gap: 0.75rem; }
+    .project-meta { display: flex; align-items: center; justify-content: space-between; }
+    .project-type {
+      font-family: 'DM Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 0.2rem 0.55rem; border-radius: 3px;
+    }
+    .type-univ { background: var(--accent-dim); color: var(--accent); }
+    .type-perso { background: rgba(251,146,60,0.12); color: var(--orange); }
+    .type-soon { background: rgba(96,165,250,0.12); color: var(--blue); }
+    .project-name { font-family: 'DM Serif Display', serif; font-size: 1.25rem; color: var(--text); line-height: 1.2; }
+    .project-desc { font-size: 0.85rem; color: var(--text-dim); line-height: 1.6; flex: 1; }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.25rem; }
+    .project-links { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.5rem; }
+    .project-link {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.05em; color: var(--accent); text-decoration: none;
+      padding: 0.3rem 0.7rem; border: 1px solid var(--accent-border);
+      border-radius: 3px; transition: background 0.2s;
+    }
+    .project-link:hover { background: var(--accent-dim); }
+    .project-link-dash {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.05em; color: var(--blue); text-decoration: none;
+      padding: 0.3rem 0.7rem; border: 1px solid rgba(96,165,250,0.3);
+      border-radius: 3px; transition: background 0.2s;
+    }
+    .project-link-dash:hover { background: rgba(96,165,250,0.1); }
+    .project-link-dash {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.05em; color: var(--blue); text-decoration: none;
+      padding: 0.3rem 0.7rem; border: 1px solid rgba(96,165,250,0.3);
+      border-radius: 3px; transition: background 0.2s;
+    }
+    .project-link-dash:hover { background: rgba(96,165,250,0.1); }
+
+    /* CONTACT */
+    #contact { text-align: left; }
+    .contact-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .contact-left {}
+    .contact-desc { color: var(--text-dim); font-size: 0.95rem; max-width: 400px; margin: 0 0 2rem; line-height: 1.7; }
+    .contact-links { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 3rem; }
+
+    /* Form */
+    .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+    .form-label {
+      font-family: 'DM Mono', monospace; font-size: 0.6rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted);
+    }
+    .form-input, .form-textarea {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 300;
+      color: var(--text); outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      resize: none;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-muted); }
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--accent-border);
+      box-shadow: 0 0 0 3px var(--accent-dim);
+    }
+    .form-textarea { min-height: 140px; }
+    .form-submit {
+      align-self: flex-start; background: var(--accent); color: #0d0d0f;
+      border: none; border-radius: 4px; padding: 0.75rem 1.8rem;
+      font-family: 'DM Mono', monospace; font-size: 0.72rem;
+      letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500;
+      cursor: pointer; transition: background 0.2s, transform 0.2s;
+    }
+    .form-submit:hover { background: #c4b5fd; transform: translateY(-1px); }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+    .form-success {
+      display: none; background: rgba(110,231,183,0.1); border: 1px solid rgba(110,231,183,0.3);
+      border-radius: 6px; padding: 1rem 1.25rem;
+      font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--green);
+    }
+    .form-error {
+      display: none; background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.3);
+      border-radius: 6px; padding: 1rem 1.25rem;
+      font-family: 'DM Mono', monospace; font-size: 0.78rem; color: #f87171;
+    }
+
+    .referee-card {
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: 8px; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.4rem;
+    }
+    .referee-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.2rem; }
+    .referee-name { font-size: 1rem; font-weight: 500; color: var(--text); }
+    .referee-role { font-size: 0.83rem; color: var(--text-dim); line-height: 1.5; }
+    .referee-email { font-family: 'DM Mono', monospace; font-size: 0.76rem; color: var(--accent); text-decoration: none; margin-top: 0.25rem; }
+    .referee-email:hover { text-decoration: underline; }
+
+    .contact-right { display: flex; flex-direction: column; gap: 1.5rem; padding-top: 0.5rem; }
+    .contact-right-title {
+      font-family: 'DM Mono', monospace; font-size: 0.65rem;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: 0.25rem;
+    }
+
+    @media (max-width: 900px) {
+      .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem clamp(1.5rem, 8vw, 8rem); border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: 'DM Mono', monospace; font-size: 0.62rem; color: var(--text-muted);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      #about .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .interests-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      #projects .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">AN<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">À propos</a></li>
+    <li><a href="#skills">Compétences</a></li>
+    <li><a href="#projects">Projets</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="btn btn-ghost" href="https://drive.google.com/file/d/1N-Ni3TrPMtLelqfhttCGMOaaIXGjdW-Y/view?usp=sharing" target="_blank">CV PDF ↗</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-photo-wrap">
+    <img src="Image/moi.jpg" alt="Ayman NAÏMI" class="hero-photo" />
+  </div>
+  <div class="hero-tag">Data Analyst</div>
+  <h1 class="hero-name">Ayman<br><em>NAÏMI</em></h1>
+  <p class="hero-sub">Étudiant en BUT Science des Données à l'Université Paris Cité. Je transforme des données brutes en décisions éclairées, avec méthode et rigueur.</p>
+  <div class="hero-ctas">
+    <a class="btn btn-primary" href="#projects">Voir mes projets</a>
+    <a class="btn btn-ghost" href="#contact">Me contacter</a>
+  </div>
+  <div class="availability-badge">Disponible en alternance · Sept. 2026 – Juil. 2027</div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">01 — À propos</div>
+  <div class="about-grid">
+    <div class="about-body">
+      <div class="about-text reveal">
+        <h2 class="section-title">Analytique<br>par <em>nature</em>.</h2>
+        <p>Étudiant de 20 ans en 2ᵉ année de <strong>BUT Science des Données – parcours Exploration et Modélisation Statistique</strong>, je me forme à l'analyse et à la modélisation dans une approche rigoureuse et structurée.</p>
+        <p>Je m'intéresse particulièrement à la transformation de données brutes en information exploitable : comprendre les phénomènes, construire des modèles explicatifs et prédictifs, et produire des restitutions claires pour <strong>éclairer la prise de décision</strong>.</p>
+        <p>Mon approche est avant tout <strong>analytique et méthodique</strong>, avec une attention portée à la cohérence des raisonnements, à la qualité des données et à la fiabilité des résultats.</p>
+      </div>
+
+      <div class="reveal">
+        <div class="subsection-title">Centres d'intérêt</div>
+        <div class="interests-grid">
+          <div class="interest-item">
+            <div class="interest-name">Logique</div>
+            <div class="interest-desc">Explorer les mécanismes du raisonnement, analyser la structure des arguments et identifier les critères qui permettent de distinguer une démonstration valide d'un discours fallacieux.</div>
+          </div>
+          <div class="interest-item">
+            <div class="interest-name">Épistémologie</div>
+            <div class="interest-desc">Étudier les conditions de production du savoir, clarifier la différence entre croyance et connaissance, et analyser le statut de la vérité en science.</div>
+          </div>
+          <div class="interest-item">
+            <div class="interest-name">Métaphysique</div>
+            <div class="interest-desc">Interroger les fondements de la réalité, examiner les questions qui dépassent le strict cadre empirique et réfléchir aux limites de l’explication scientifique.</div>
+          </div>
+          <div class="interest-item">
+            <div class="interest-name">Histoire</div>
+            <div class="interest-desc">Replacer les phénomènes dans leur contexte, comprendre les dynamiques d’évolution et pour mieux aborder le présent.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <div class="subsection-title">Objectifs</div>
+        <div class="objectives-list">
+          <div class="objective-item">Devenir <strong style="color:var(--text)">Data Scientist</strong></div>
+          <div class="objective-item">Évoluer dans un environnement technique stimulant</div>
+          <div class="objective-item">Travailler à l'international</div>
+          <div class="objective-item">Progresser en data science, langues étrangères et production d'analyses rigoureuses</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-cards reveal">
+      <div class="info-card">
+        <span class="info-label">Formation</span>
+        <span class="info-value">BUT Science des Données — Paris Cité</span>
+      </div>
+      <div class="info-card">
+        <span class="info-label">Alternance</span>
+        <span class="info-value">Sept. 2026 → Juil. 2027</span>
+      </div>
+      <div class="info-card">
+        <span class="info-label">Langues</span>
+        <span class="info-value">FR · EN B2 · ES B1 · AR B1</span>
+      </div>
+      <div class="info-card">
+        <span class="info-label">Contact</span>
+        <span class="info-value"><a href="mailto:naimi5@protonmail.com">naimi5@protonmail.com</a></span>
+      </div>
+      <div class="info-card">
+        <span class="info-label">LinkedIn</span>
+        <span class="info-value"><a href="https://www.linkedin.com/in/ayman-naïmi-6aa315261" target="_blank">Ayman NAÏMI ↗</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">02 — Compétences</div>
+  <h2 class="section-title reveal">Stack &amp; <em>savoir-faire</em>.</h2>
+  <br><br>
+  <div class="skills-columns">
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Statistiques</div>
+      <div class="skill-tags">
+        <span class="tag">Stat. descriptives</span>
+        <span class="tag">Stat. inférentielles</span>
+        <span class="tag">Tests statistiques</span>
+        <span class="tag">Intervalles de confiance</span>
+        <span class="tag">Régression linéaire</span>
+        <span class="tag">Régression logistique</span>
+        <span class="tag">Modélisation stat.</span>
+        <span class="tag">ACP</span>
+        <span class="tag">Classification</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Machine Learning & Data</div>
+      <div class="skill-tags">
+        <span class="tag">Data mining</span>
+        <span class="tag">Arbres de décision</span>
+        <span class="tag">k-NN</span>
+        <span class="tag">Apprentissage supervisé</span>
+        <span class="tag">Apprentissage non supervisé</span>
+        <span class="tag">Data warehouse</span>
+        <span class="tag">OLAP</span>
+        <span class="tag">ETL</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Programmation</div>
+      <div class="skill-tags">
+        <span class="tag highlight">Python</span>
+        <span class="tag highlight">R</span>
+        <span class="tag highlight">SAS</span>
+        <span class="tag highlight">SQL</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <div class="skill-group-title">Qualités</div>
+      <div class="skill-tags">
+        <span class="tag">Curiosité intellectuelle</span>
+        <span class="tag">Rigueur</span>
+        <span class="tag">Méthode</span>
+        <span class="tag">Communication</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">03 — Projets</div>
+  <h2 class="section-title reveal">Ce que j'ai <em>construit</em>.</h2>
+  <br><br>
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-img" style="padding:0;"><img src="Image/lol2024.png" style="width:100%;height:100%;object-fit:cover;" alt="World LoL 2024"></div>
+      <div class="project-body">
+        <div class="project-meta"><span class="project-type type-univ">Universitaire</span></div>
+        <div class="project-name">World LoL 2024</div>
+        <div class="project-desc">Analyse des championnats nationaux de League of Legends 2024. 82 joueurs professionnels, 29 variables couvrant performance individuelle, économie de jeu et early game. Dashboard interactif R/Shiny responsive.</div>
+        <div class="project-tags"><span class="tag">R</span><span class="tag">Shiny</span><span class="tag">Analyse exploratoire</span></div>
+        <div class="project-links">
+          <a class="project-link" href="#" target="_blank">Dashboard ↗</a>
+          <a class="project-link" href="https://drive.google.com/file/d/11cJZBPJqeC79DETUMhiwupQw99EJF-Dh/view?usp=sharing" target="_blank" target="_blank">Rapport PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img" style="padding:0;"><img src="Image/cnp.png" style="width:100%;height:100%;object-fit:cover;" alt="Automatisation SAS"></div>
+      <div class="project-body">
+        <div class="project-meta"><span class="project-type type-univ">Universitaire</span></div>
+        <div class="project-name">Automatisation SAS</div>
+        <div class="project-desc">Automatisation de traitements SAS via Excel. Pilotage par périmètre et fréquence, avec un paramètre "nombre de semaines". Suppression des interventions manuelles, chaîne de traitement entièrement automatisée.</div>
+        <div class="project-tags"><span class="tag">SAS</span><span class="tag">Excel</span><span class="tag">Macros</span><span class="tag">ETL</span></div>
+        <div class="project-links">
+          <a class="project-link" href="https://drive.google.com/file/d/1VNFJE3u2ayDuVMp7RaDTNImmUcJsW-k-/view?usp=sharing" target="_blank" target="_blank">Rapport PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img" style="padding:0;"><img src="Image/caf.png" style="width:100%;height:100%;object-fit:cover;" alt="Reporting CAF"></div>
+      <div class="project-body">
+        <div class="project-meta"><span class="project-type type-univ">Universitaire</span></div>
+        <div class="project-name">Reporting CAF National</div>
+        <div class="project-desc">Reporting national des indicateurs clés des CAF sur l'ensemble du territoire français. Données nettoyées sous SAS, trois tableaux de bord produits : Power BI vue nationale, Excel indicateurs et alertes.</div>
+        <div class="project-tags"><span class="tag">SAS</span><span class="tag">Power BI</span><span class="tag">Excel</span><span class="tag">Groupe</span></div>
+        <div class="project-links">
+          <a class="project-link" href="https://drive.google.com/file/d/1ic5Mhj1YY_fDzZS6nRdcQrx7xKsRGoNV/view?usp=drive_link" target="_blank">Rapport PDF</a>
+          <a class="project-link-dash" href="https://drive.google.com/file/d/1cg-UN4N5vLA9YNEmAsIUD-4lErKzWSmU/view" target="_blank">Dashboard Excel ↗</a>
+          <a class="project-link-dash" href="https://drive.google.com/file/d/1zGmiSpxTrL-tUDrBv4NtYsBtDk04F3gD/view" target="_blank">Indicateurs d'alerte ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img" style="padding:0;"><img src="Image/calmar.png" style="width:100%;height:100%;object-fit:cover;" alt="Redressement CALMAR" style="display:none"></div>
+      <div class="project-body">
+        <div class="project-meta"><span class="project-type type-univ">Universitaire</span></div>
+        <div class="project-name">Redressement CALMAR</div>
+        <div class="project-desc">Enquête sur les pratiques culturelles des étudiants de Paris Cité (2 722 réponses, 82 variables). Redressement par la macro CALMAR (INSEE/SAS) pour un échantillon représentatif. Analyses descriptives comparatives par cursus.</div>
+        <div class="project-tags"><span class="tag">SAS</span><span class="tag">CALMAR</span><span class="tag">Excel</span><span class="tag">Statistiques</span></div>
+        <div class="project-links">
+          <a class="project-link" href="https://drive.google.com/file/d/1dTgPxLluGybxbFVMmianWM97Uqw18OJl/view?usp=drive_link" target="_blank" target="_blank">Rapport PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img" style="padding:0;"><img src="Image/insep.png" style="width:100%;height:100%;object-fit:cover;" alt="800m"></div>
+      <div class="project-body">
+        <div class="project-meta"><span class="project-type type-univ">Universitaire · INSEP</span></div>
+        <div class="project-name">Performances 800m</div>
+        <div class="project-desc">151 527 chronométrages officiels. Analyse de la relation âge–performance (LOESS, modèles linéaire, quadratique, cubique). Âge optimal estimé : ~22 ans (H) et ~25 ans (F). Déclin plus rapide chez les hommes.</div>
+        <div class="project-tags"><span class="tag">R</span><span class="tag">LOESS</span><span class="tag">Régression</span><span class="tag">Groupe</span></div>
+        <div class="project-links">
+          <a class="project-link" href="https://drive.google.com/file/d/14DGjT100Yy-21eKpu8bdlMhQ5lm8iD8_/view?usp=drive_link" target="_blank" target="_blank">Rapport PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img" style="padding:0;"><img src="Image/sentinelles.png" style="width:100%;height:100%;object-fit:cover;" alt="Sentinelles"></div>
+      <div class="project-body">
+        <div class="project-meta"><span class="project-type type-univ">Universitaire</span></div>
+        <div class="project-name">Analyse Épidémio. Sentinelles</div>
+        <div class="project-desc">Évolution temporelle de l'incidence de la diarrhée aiguë (réseau Sentinelles). Décomposition tendance/saisonnalité, comparaison régression polynomiale, ARIMA et ETS. Le modèle ETS s'avère le plus fiable.</div>
+        <div class="project-tags"><span class="tag">R</span><span class="tag">ARIMA</span><span class="tag">ETS</span><span class="tag">Séries temporelles</span></div>
+        <div class="project-links">
+          <a class="project-link" href="https://drive.google.com/file/d/1UIGsAkCzNIpimjkQg7EZIpzZigAjoNKo/view?usp=drive_link" target="_blank" target="_blank">Rapport PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img" style="padding:0;"><img src="Image/t2f.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Tour de France"></div>
+      <div class="project-body">
+        <div class="project-meta"><span class="project-type type-perso">Personnel</span></div>
+        <div class="project-name">Tour de France 1903–2017</div>
+        <div class="project-desc">2 236 étapes du Tour de France (Kaggle). Exploration de l'histoire du Tour à travers les performances des coureurs et les caractéristiques des étapes. Dashboard interactif de visualisation.</div>
+        <div class="project-tags"><span class="tag">R</span><span class="tag">Visualisation</span><span class="tag">Kaggle</span></div>
+        <div class="project-links">
+          <a class="project-link" href="#" target="_blank">Dashboard ↗</a>
+          <a class="project-link" href="https://drive.google.com/file/d/1BDmB_ChpibAFkiWFrECL4K08fsffcBDS/view?usp=drive_link" target="_blank" target="_blank">Rapport PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-img" style="padding:0;"><img src="Image/diabete.jpg" style="width:100%;height:100%;object-fit:cover;" alt="Diabète"></div>
+      <div class="project-body">
+        <div class="project-meta"><span class="project-type type-perso">Personnel</span></div>
+        <div class="project-name">Prédiction Diabète</div>
+        <div class="project-desc">Machine learning sur le dataset Pima Indians Diabetes (768 observations). Régression logistique avec normalisation, split train/test, matrice de confusion. Précision de <strong style="color:var(--green)">75,32 %</strong> sur le jeu de test.</div>
+        <div class="project-tags"><span class="tag">Python</span><span class="tag">scikit-learn</span><span class="tag">pandas</span><span class="tag">Régression logistique</span></div>
+        <div class="project-links">
+          <a class="project-link" href="https://drive.google.com/file/d/1NntSpODrus8FqIpQJbcsa4fyx3m6xeSJ/view?usp=drive_link" target="_blank" target="_blank">Rapport PDF</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal" style="opacity:0.55; pointer-events:none;">
+      <div class="project-img" style="padding:0;"><img src="Image/thales.png" style="width:100%;height:100%;object-fit:cover;" alt="Thales"></div>
+      <div class="project-body">
+        <div class="project-meta"><span class="project-type type-soon">Bientôt</span></div>
+        <div class="project-name">Rapport de stage — Thales</div>
+        <div class="project-desc" style="font-style:italic; color:var(--text-muted)">En cours de rédaction. Bientôt disponible.</div>
+        <div class="project-tags"><span class="tag">À venir</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">04 — Contact</div>
+  <div class="contact-inner">
+
+    <!-- Formulaire -->
+    <div class="contact-left reveal">
+      <h2 class="section-title" style="margin-bottom:1rem;">Travaillons<br><em>ensemble.</em></h2>
+      <p class="contact-desc">Disponible en alternance à partir de septembre 2026. Remplissez le formulaire ou contactez-moi directement.</p>
+      <div class="contact-links">
+        <a class="btn btn-ghost" href="mailto:naimi5@protonmail.com">naimi5@protonmail.com</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/ayman-naïmi-6aa315261" target="_blank">LinkedIn ↗</a>
+        <a class="btn btn-ghost" href="https://drive.google.com/file/d/1N-Ni3TrPMtLelqfhttCGMOaaIXGjdW-Y/view?usp=sharing" target="_blank">CV PDF ↗</a>
+      </div>
+
+      <!-- Remplace YOUR_FORM_ID par ton ID Formspree après inscription sur formspree.io -->
+      <form class="contact-form" id="contactForm" action="https://formspree.io/f/xvzwrgae" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="name">Nom</label>
+            <input class="form-input" id="name" name="name" type="text" placeholder="Jean Dupont" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-input" id="email" name="email" type="email" placeholder="jean@exemple.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="subject">Sujet</label>
+          <input class="form-input" id="subject" name="subject" type="text" placeholder="Proposition d'alternance — Data Analyst" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message">Message</label>
+          <textarea class="form-textarea" id="message" name="message" placeholder="Bonjour Ayman, je vous contacte au sujet de..." required></textarea>
+        </div>
+        <div class="form-success" id="formSuccess">✓ Message envoyé ! Je vous répondrai dans les plus brefs délais.</div>
+        <div class="form-error" id="formError">Une erreur s'est produite. Contactez-moi directement par email.</div>
+        <button class="form-submit" type="submit" id="formBtn">Envoyer le message</button>
+      </form>
+    </div>
+
+    <!-- Colonne droite -->
+    <div class="contact-right reveal">
+      <div>
+        <div class="contact-right-title">Référente académique</div>
+        <div class="referee-card">
+          <span class="referee-label">Contact université</span>
+          <span class="referee-name">Mme Florence Muri</span>
+          <span class="referee-role">Responsable des études de 2e année, BUT Science des Données — IUT de Paris</span>
+          <a class="referee-email" href="mailto:florence.muri-majoube@u-paris.fr">florence.muri-majoube@u-paris.fr</a>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Ayman NAÏMI</span>
+  <span>BUT Science des Données · Université Paris Cité</span>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Formspree AJAX
+  const form = document.getElementById('contactForm');
+  const btn = document.getElementById('formBtn');
+  const success = document.getElementById('formSuccess');
+  const error = document.getElementById('formError');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = 'Envoi en cours...';
+    success.style.display = 'none';
+    error.style.display = 'none';
+
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        success.style.display = 'block';
+        form.reset();
+        btn.textContent = 'Message envoyé ✓';
+      } else {
+        throw new Error();
+      }
+    } catch {
+      error.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Envoyer le message';
+    }
+  });
+</script>
+</body>
+</html>
